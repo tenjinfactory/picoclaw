@@ -22,6 +22,7 @@ import (
 // session manager, context builder, and tool registry.
 type AgentInstance struct {
 	ID                        string
+	Default                   bool
 	Name                      string
 	Model                     string
 	Fallbacks                 []string
@@ -202,8 +203,11 @@ func NewAgentInstance(
 		}
 	}
 
+	isDefault := agentCfg != nil && agentCfg.Default
+
 	return &AgentInstance{
 		ID:                        agentID,
+		Default:                   isDefault,
 		Name:                      agentName,
 		Model:                     model,
 		Fallbacks:                 fallbacks,

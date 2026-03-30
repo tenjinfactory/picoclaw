@@ -127,9 +127,15 @@ func (r *AgentRegistry) Close() {
 }
 
 // GetDefaultAgent returns the default agent instance.
+// Priority: agent with Default=true > agent with ID "main" > first registered.
 func (r *AgentRegistry) GetDefaultAgent() *AgentInstance {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
+	for _, agent := range r.agents {
+		if agent.Default {
+			return agent
+		}
+	}
 	if agent, ok := r.agents["main"]; ok {
 		return agent
 	}
